@@ -1,0 +1,2 @@
+id,frameRate,locationId,speedLimit,month,weekDay,startTime,duration,totalDrivenDistance,totalDrivenTime,numVehicles,numCars,numTrucks,upperLaneMarkings,lowerLaneMarkings
+52,25,1,33.33,11.2017,Wed,12:30,1.009200e+03,852383.63,28410.20,2121,1600,521,3.36;7.42;11.22;15.20,21.21;25.36;29.25;33.40
