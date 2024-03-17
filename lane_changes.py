@@ -30,6 +30,7 @@ groups = df.groupby('frame')
 
 
 
+
 for frame, group in groups:
     prev = dict(zip(group['id'].tolist(), group['laneId'].tolist()))
     break
@@ -46,14 +47,14 @@ for frame, group in groups:
         if vehicle in prev:
             if curr[vehicle] in [1,2,3]:
                 if curr[vehicle] > prev[vehicle]:
-                    lane_changes['right'] = lane_changes['right'] + 1
+                    lane_changes['right'] += 1
                 elif curr[vehicle] < prev[vehicle]:
-                    lane_changes['left'] = lane_changes['left'] + 1
+                    lane_changes['left'] += 1
             elif curr[vehicle] in [4,5,6]:
                 if curr[vehicle] > prev[vehicle]:
-                    lane_changes['left'] = lane_changes['left'] + 1
+                    lane_changes['left'] += 1
                 elif curr[vehicle] < prev[vehicle]:
-                    lane_changes['right'] = lane_changes['right'] + 1
+                    lane_changes['right'] += 1
             prev[vehicle] = curr[vehicle]
         else:
             prev[vehicle] = curr[vehicle]
