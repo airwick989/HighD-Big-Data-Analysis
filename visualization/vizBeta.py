@@ -39,7 +39,7 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
     axis.set_aspect('equal')
     
     # Set the highway image as the background with proper aspect ratio
-    highway_extent = [0, highway_length, min(west_bound_lane_lines) - 8, max(east_bound_lane_lines) + 8]
+    highway_extent = [0, highway_length, min(west_bound_lane_lines) - 10, max(east_bound_lane_lines) + 8]
     axis.imshow(highway_image, extent=highway_extent, aspect='auto')
     
     # Optionally, set a tighter y-limits to zoom in on the highway
@@ -67,7 +67,7 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
             vehicle_color = 'blue'
           # Change as needed
         vehicle_edge_color = 'black'  # Border color
-        vehicle_alpha = 0.7  # Transparency
+        vehicle_alpha = 0  # Transparency
         
         # Create the rectangle representing the vehicle
         vehicle_plot = plt.Rectangle((vehicle['x'], vehicle_center_y), vehicle_width, vehicle_height,
@@ -76,7 +76,7 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
         axis.add_patch(vehicle_plot)
 
         # Define the label text including vehicle ID and xVelocity (in km/h)
-        label_text = f"{int(vehicle['xVelocity'])}km/h | ID:{int(vehicle['id'])}"
+        label_text = f"{int(vehicle['xVelocity'])}km/h | ID:{int(vehicle_id)}"
         
         # Adjust the text position to be within the vehicle rectangle
         text_x_position = vehicle['x']
@@ -94,24 +94,22 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
         reversed_lightning_image = np.flip(lightning_image, axis=1)
         reversed_garbage_image = np.flip(garbage_image, axis=1)
         
-        # Create an annotation box for overlay image
-        
+        # Create an annotation box for overlay image        
         if vehicle_type == 'Car':
-            imagebox = OffsetImage(lightning_image, zoom=0.25)
-            if vehicle['xVelocity'] < 0:
-                imagebox = OffsetImage(reversed_lightning_image, zoom=0.25)
-            
+            image_to_use = reversed_lightning_image if vehicle['xVelocity'] < 0 else lightning_image
+            zoom_level = 0.15
         else:
-            imagebox = OffsetImage(reversed_garbage_image, zoom=1)
-            if vehicle['xVelocity'] < 0:
-                imagebox = OffsetImage(garbage_image, zoom=1)
+            image_to_use = reversed_garbage_image if vehicle['xVelocity'] > 0 else garbage_image
+            zoom_level = 0.75
 
-        ab = AnnotationBbox(imagebox, (vehicle['x'], vehicle_center_y), frameon=False)
+        # Create an annotation box for overlay image
+        imagebox = OffsetImage(image_to_use, zoom=zoom_level)
+        ab = AnnotationBbox(imagebox, (vehicle['x'], vehicle_center_y + 1), frameon=False)
         axis.add_artist(ab)
 
 
 # Create the figure and axis for the animation
-fig, axis = plt.subplots(figsize=(46, 10))
+fig, axis = plt.subplots(figsize=(64, 16))
 axis.set_aspect('equal')  # Set the aspect ratio to be equal
 
 # Create the animation
@@ -120,7 +118,7 @@ ani = animation.FuncAnimation(fig, update_plot, frames=sorted(tracks_file['frame
                               interval=100)
 
 # Set up the writer for saving the file
-writer = FFMpegWriter(fps=75, metadata=dict(artist='Me'), bitrate=1800, codec='libx264')
+writer = FFMpegWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800, codec='libx264')
 
 # Save the animation
 ani.save('group9_animation.mp4', writer=writer, dpi=100)  # Specify the DPI if needed
