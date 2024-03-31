@@ -22,7 +22,7 @@ west_bound_lane_lines = list(map(float, recording_meta_file['upperLaneMarkings']
 # Left to right
 east_bound_lane_lines = list(map(float, recording_meta_file['lowerLaneMarkings'].iloc[0].split(';')))
 
-# Define highway length (may need to be adjusted to match your dataset)
+# Define highway length
 highway_length = 420
 
 # Print the lanes in drawings
@@ -121,7 +121,7 @@ ani = animation.FuncAnimation(fig, update_plot, frames=sorted(tracks_file['frame
 writer = FFMpegWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800, codec='libx264')
 
 # Save the animation
-ani.save('group9_animation.mp4', writer=writer, dpi=100)  # Specify the DPI if needed
+ani.save('group9_animation.mp4', writer=writer, dpi=100)  # Specify the DPI
 
 # Show the result
 plt.show()
