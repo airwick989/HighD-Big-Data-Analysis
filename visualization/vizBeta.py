@@ -4,6 +4,8 @@ from matplotlib.animation import FFMpegWriter
 import pandas as pd
 from PIL import Image
 import matplotlib.image as mpimg
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import numpy as np
 
 # Load the tracks and recording meta data
 tracks_file = pd.read_csv('../highd-dataset-v1.0/data/01_tracks.csv')
@@ -85,6 +87,27 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
         
         # Add the label text for each vehicle
         axis.text(text_x_position, text_y_position, label_text, color='black', fontsize=24, ha='center', va='center', bbox=bbox_props)
+        
+        # Load the overlay image
+        garbage_image = mpimg.imread('garbage.png')
+        lightning_image = mpimg.imread('lightning.png')
+        reversed_lightning_image = np.flip(lightning_image, axis=1)
+        reversed_garbage_image = np.flip(garbage_image, axis=1)
+        
+        # Create an annotation box for overlay image
+        
+        if vehicle_type == 'Car':
+            imagebox = OffsetImage(lightning_image, zoom=0.25)
+            if vehicle['xVelocity'] < 0:
+                imagebox = OffsetImage(reversed_lightning_image, zoom=0.25)
+            
+        else:
+            imagebox = OffsetImage(reversed_garbage_image, zoom=1)
+            if vehicle['xVelocity'] < 0:
+                imagebox = OffsetImage(garbage_image, zoom=1)
+
+        ab = AnnotationBbox(imagebox, (vehicle['x'], vehicle_center_y), frameon=False)
+        axis.add_artist(ab)
 
 
 # Create the figure and axis for the animation
