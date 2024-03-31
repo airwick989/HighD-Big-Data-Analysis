@@ -58,7 +58,7 @@ def update_plot(car_frame_number, tracks_file, axis, fig, highway_image, west_bo
         vehicle_center_y = vehicle['y'] - vehicle_height / 2
         
         # Vehicle color, border color, and transparency can be adjusted as needed
-        vehicle_color = 'cyan'
+
         if vehicle_type == 'Car':
             vehicle_color = 'red'
         else:
