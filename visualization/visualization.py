@@ -113,9 +113,9 @@ class HighwayAnimation:
         ani = animation.FuncAnimation(self.fig, self.update_plot, frames=sorted(self.tracks_file['frame'].unique()),
                                       interval=100)
         writer = FFMpegWriter(fps=24, metadata=dict(artist='Me'), bitrate=1800, codec='libx264')
-        ani.save(f'group{self.recording_number}_animation.mp4', writer=writer, dpi=100)
+        ani.save(f'group{self.special_car_ids}_animation.mp4', writer=writer, dpi=100)
 
 # Example usage:
-highway_animation = HighwayAnimation(base_path='../highd-dataset-v1.0', recording_number=1, special_car_ids=[977,732,972,701,484,11,79])
-highway_animation.create_animation()
-plt.show()
+#highway_animation = HighwayAnimation(base_path='../highd-dataset-v1.0', recording_number=1, special_car_ids=[977,732,972,701,484,11,79])
+#highway_animation.create_animation()
+#plt.show()
